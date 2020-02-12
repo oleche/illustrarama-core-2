@@ -23,4 +23,4 @@ jobs:
           command: npm run test
       - deploy:
           name: digital-ocean
-          command: ssh -o "StrictHostKeyChecking no" root@128.199.57.228 "cd /opt/illustrarama/illustrarama-site; git pull; npm install; npm run-script build; pm2 restart illustrarama-site"
+          command: ssh -o "StrictHostKeyChecking no" root@128.199.57.228 "cd /opt/illustrarama/illustrarama-core; git pull; npm install; pm2 restart illustrarama-core"
