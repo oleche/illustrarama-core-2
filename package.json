@@ -1,0 +1,52 @@
+{
+  "name": "illustrarama-core",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha --timeout 10000",
+    "lint": "eslint --ext .js --ignore-path .gitignore ."
+  },
+  "author": {
+    "name": "Oscar",
+    "email": "oleche@geekcowsd.com",
+    "url": "http://www.oscarleche.com/"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "debug": "~2.6.9",
+    "express": "^4.17.1",
+    "fb": "^2.0.0",
+    "fs-extra": "^8.1.0",
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "md5": "^2.2.1",
+    "method-override": "~2.3.5",
+    "mongoose": "^5.8.7",
+    "morgan": "^1.9.1",
+    "mustache": "^4.0.0",
+    "mysql": "^2.15.0",
+    "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.0",
+    "npm": "^6.13.6",
+    "passport": "^0.4.0",
+    "pug": "^2.0.4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.7"
+  }
+}
