@@ -97,6 +97,8 @@ app.use((err, req, res, next) => {
 });
 
 // cronjobs
-cron.schedule('0 0 * * SUN', mailing.weekly(newsModel, subscriptionModel));
+cron.schedule('0 0 * * SUN', () => {
+  mailing.weekly(newsModel, subscriptionModel);
+});
 
 module.exports = app;
