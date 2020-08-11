@@ -57,7 +57,7 @@ function findAllContents(news, cb) {
 
 // Create and Save a new Note
 exports.create = (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.header.authorization;
   // Create a Note
   const news = new News({
     title: req.body.title || 'Untitled',
@@ -286,7 +286,7 @@ exports.vote = () => {
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.header.authorization;
 
   res.setHeader('Content-Type', 'application/json');
 
