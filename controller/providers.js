@@ -2,7 +2,7 @@ const Providers = require('../model/providers.js');
 
 // Create and Save a new Note
 exports.create = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
   // Create a Note
   const provider = new Providers({
     name: req.body.name || 'Untitled',
@@ -128,7 +128,7 @@ exports.update = () => {
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
 
   res.setHeader('Content-Type', 'application/json');
 

@@ -3,7 +3,7 @@ const Subscription = require('../model/subscription.js');
 
 // Create and Save a new Note
 exports.create = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
   // Create a Note
   const subscription = new Subscription({
     email: req.body.email || 'nodest@geekcowsd.com',
@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
   const perPage = 20;
   const page = req.query.page || 1;
   const query = {};
@@ -79,7 +79,7 @@ exports.findAll = (req, res) => {
 
 // Find a single note with a noteId
 exports.findOne = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
 
   res.setHeader('Content-Type', 'application/json');
 
@@ -109,7 +109,7 @@ exports.findOne = (req, res) => {
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
-  const token = req.header.authorization;
+  const token = req.headers.authorization;
 
   res.setHeader('Content-Type', 'application/json');
 
