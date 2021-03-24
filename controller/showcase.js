@@ -45,6 +45,7 @@ exports.findAll = (req, res) => {
   if (!querySearch) {
     if (!queryTag) {
       const newsResult = [];
+      const newsResult.keywords = [];
       const imageFilter = { type: 'IMAGE' };
       res.locals.newsContent.find(imageFilter, {}, query).sort({ newsId: -1 }).exec((err, newsContent) => {
         if (err) {
@@ -54,6 +55,9 @@ exports.findAll = (req, res) => {
         newsContent.forEach((element, index, array) => {
           attachNewsMain(element, function(digested){
             newsResult.push(digested);
+            if (digested.parent !== undefined && digested.parent.keywords !== undefined && digested.parent.keywords instanceof Array) {
+              newsResult.keywords.concat(digested.parent.keywords);
+            }
             items++;
             if(items === array.length) {
               return res.json(newsResult);
