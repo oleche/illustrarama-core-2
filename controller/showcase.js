@@ -53,7 +53,7 @@ exports.findAll = (req, res) => {
         let items = 0;
         newsContent.forEach((element, index, array) => {
           attachNewsMain(element, function(digested){
-            newsResult.push(element);
+            newsResult.push(digested);
             items++;
             if(items === array.length) {
               return res.json(newsResult);
