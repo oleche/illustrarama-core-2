@@ -1,12 +1,18 @@
 const express = require('express');
-const showcase = require('../controller/showcase.js');
+const news = require('../controller/news.js');
 
 const router = express.Router();
 
-router.get('/', showcase.findAll);
+router.post('/', news.create);
 
-router.get('/:id', showcase.findOne);
+router.get('/', news.findAll);
 
-router.put('/:id/vote', showcase.vote);
+router.get('/:id', news.findOne);
+
+router.put('/:id', news.update);
+
+router.put('/:id/vote', news.vote);
+
+router.delete('/:noteId', news.delete);
 
 module.exports = router;
