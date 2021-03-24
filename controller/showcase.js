@@ -45,7 +45,7 @@ exports.findAll = (req, res) => {
   if (!querySearch) {
     if (!queryTag) {
       const newsResult = [];
-      const newsResult.keywords = [];
+      newsResult.keywords = [];
       const imageFilter = { type: 'IMAGE' };
       res.locals.newsContent.find(imageFilter, {}, query).sort({ newsId: -1 }).exec((err, newsContent) => {
         if (err) {
