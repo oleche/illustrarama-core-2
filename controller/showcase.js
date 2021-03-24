@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
         newsContent.forEach((element, index, array) => {
           attachNewsMain(element, function(digested){
             newsResult.push(digested);
-            if (digested.parent !== undefined && digested.parent.keywords !== undefined && digested.parent.keywords instanceof Array) {
+            if (digested.parent !== undefined && digested.parent.keywords !== undefined) {
               newsResult.keywords.concat(digested.parent.keywords);
             }
             items++;
