@@ -14,6 +14,7 @@ const news = require('./routes/news');
 const subscriptions = require('./routes/subscriptions');
 const search = require('./routes/search');
 const providers = require('./routes/providers');
+const showcase = require('./routes/showcase');
 
 const newsModel = require('./model/news');
 const providersModel = require('./model/providers');
@@ -76,6 +77,7 @@ app.use('/api/v1/news', news);
 app.use('/api/v1/subscriptions', subscriptions);
 app.use('/api/v1/search', search);
 app.use('/api/v1/providers', providers);
+app.use('/api/v1/showcase', showcase);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
