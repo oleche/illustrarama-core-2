@@ -24,7 +24,7 @@ function attachNewsMain(newsContent, cb) {
     });
 }
 
-exports.findAll = () => {
+exports.findAll = (req, res) => {
   const perPage = 20;
   const page = req.query.page || 1;
   const queryTag = req.query.tag;
@@ -65,10 +65,10 @@ exports.findAll = () => {
   }
 };
 
-exports.findOne = () => {
+exports.findOne = (req, res) => {
 
 };
 
-exports.vote = () => {
+exports.vote = (req, res) => {
 
 };
