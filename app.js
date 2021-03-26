@@ -15,11 +15,13 @@ const subscriptions = require('./routes/subscriptions');
 const search = require('./routes/search');
 const providers = require('./routes/providers');
 const showcase = require('./routes/showcase');
+const facebook = require('./routes/facebook');
 
 const newsModel = require('./model/news');
 const providersModel = require('./model/providers');
 const newsContentModel = require('./model/news-content');
 const subscriptionModel = require('./model/subscription');
+const facebooktokenModel = require('./model/facebook-token');
 
 const mailing = require('./service/mailing');
 
@@ -60,6 +62,7 @@ app.use((req, res, next) => {
   res.locals.newsContent = newsContentModel;
   res.locals.providers = providersModel;
   res.locals.subscription = subscriptionModel;
+  res.locals.facebooktoken = facebooktokenModel;
   res.locals.mongoose = mongoose;
   next();
 });
@@ -78,6 +81,7 @@ app.use('/api/v1/subscriptions', subscriptions);
 app.use('/api/v1/search', search);
 app.use('/api/v1/providers', providers);
 app.use('/api/v1/showcase', showcase);
+app.use('/api/v1/facebook', facebook);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
