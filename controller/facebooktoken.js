@@ -48,11 +48,16 @@ exports.create = (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
+  const token = req.headers.authorization;
+
   const perPage = 20;
   const page = req.query.page || 1;
   const query = {};
 
   res.setHeader('Content-Type', 'application/json');
+
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  if (token !== 'Basic Z2Vla2Nvd2RldjpnaUdHbGVzMDk=') return res.status(401).send({ auth: false, message: 'Invalid credentials' });
 
   if (page < 0 || page === 0) {
     return res.status(422).send({
@@ -77,7 +82,12 @@ exports.findAll = (req, res) => {
 
 // Find a single note with a noteId
 exports.findOne = (req, res) => {
+  const token = req.headers.authorization;
+
   res.setHeader('Content-Type', 'application/json');
+
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  if (token !== 'Basic Z2Vla2Nvd2RldjpnaUdHbGVzMDk=') return res.status(401).send({ auth: false, message: 'Invalid credentials' });
 
   FacebookToken.findOne({ token: req.params.token })
     .then((providers) => {
