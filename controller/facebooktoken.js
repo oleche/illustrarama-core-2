@@ -75,7 +75,7 @@ exports.findAll = (req, res) => {
     providers.forEach((element, index, array) => {
       return res.json(element);
     })
-    return res.json(providers); // return all employees in JSON format
+    return false; // return all employees in JSON format
   });
   return false;
 };
