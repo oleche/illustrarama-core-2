@@ -62,12 +62,15 @@ exports.findAll = (req, res) => {
   query.skip = perPage * (page - 1);
   query.limit = perPage;
 
-  res.locals.facebooktoken.find({}, {}, query).sort({ expiration: -1 }).exec((err, providers) => {
+  res.locals.facebooktoken.find({}, {}, query).exec((err, providers) => {
     // if there is an error retrieving, send the error otherwise send data
     if (err) {
       res.status(500);
     }
-    res.json(providers); // return all employees in JSON format
+    providers.forEach((element, index, array) => {
+      return res.json(element);
+    })
+    return res.json(providers); // return all employees in JSON format
   });
   return false;
 };
