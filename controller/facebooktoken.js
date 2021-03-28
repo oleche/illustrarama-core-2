@@ -67,7 +67,7 @@ exports.findAll = (req, res) => {
   query.skip = perPage * (page - 1);
   query.limit = perPage;
 
-  res.locals.facebooktoken.find({}, {}, query).order({createdAt: -1}).exec((err, providers) => {
+  res.locals.facebooktoken.find({}, {}, query).sort({createdAt: -1}).exec((err, providers) => {
     // if there is an error retrieving, send the error otherwise send data
     if (err) {
       res.status(500);
