@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-  name: String,
-  email: String,
+  userId: String,
+  firstname: String,
+  lastname: String,
   fbId: String,
   token: String,
   displayName: String,
@@ -10,6 +11,7 @@ const UserSchema = new mongoose.Schema({
   shortDescription: String,
   enabled: Boolean,
   image: String,
+  type: String,
 }, {
   timestamps: true,
 });

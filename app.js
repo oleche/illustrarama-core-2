@@ -16,12 +16,19 @@ const search = require('./routes/search');
 const providers = require('./routes/providers');
 const showcase = require('./routes/showcase');
 const facebook = require('./routes/facebook');
+const users = require('./routes/users');
+const links = require('./routes/link');
+const references = require('./routes/references');
 
 const newsModel = require('./model/news');
 const providersModel = require('./model/providers');
 const newsContentModel = require('./model/news-content');
 const subscriptionModel = require('./model/subscription');
 const facebooktokenModel = require('./model/facebook-token');
+const usersModel = require('./model/user');
+const oauthUsersModel = require('./model/oauthusers');
+const userLinkModel = require('./model/user-links');
+const referencesModel = require('./model/references');
 
 const mailing = require('./service/mailing');
 
@@ -63,7 +70,12 @@ app.use((req, res, next) => {
   res.locals.providers = providersModel;
   res.locals.subscription = subscriptionModel;
   res.locals.facebooktoken = facebooktokenModel;
+  res.locals.users = usersModel;
+  res.locals.userLink = userLinkModel;
+  res.locals.oauthusers = oauthUsersModel;
+  res.locals.references = referencesModel;
   res.locals.mongoose = mongoose;
+  res.locals.database = database;
   next();
 });
 
@@ -82,11 +94,15 @@ app.use('/api/v1/search', search);
 app.use('/api/v1/providers', providers);
 app.use('/api/v1/showcase', showcase);
 app.use('/api/v1/facebook', facebook);
+app.use('/api/v1/users', users);
+app.use('/api/v1/link', links);
+app.use('/api/v1/references', references);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = {};//new Error('Not Found');
   err.status = 404;
+  err.message = "Not found";
   next(err);
 });
 
@@ -98,7 +114,7 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json(err);//render('error');
   next(err);
 });
 

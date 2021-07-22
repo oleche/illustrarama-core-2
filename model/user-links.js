@@ -5,6 +5,7 @@ const UserLinkSchema = new mongoose.Schema({
   url: String,
   type: String,
   description: String,
+  userId: String,
 }, {
   timestamps: true,
 });

@@ -1,20 +1,31 @@
 const express = require('express');
+const user = require('../controller/users.js');
+const verifier = require('../middleware/authVerifier')
+const {body, validationResult} = require('express-validator');
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  res.setHeader('Content-Type', 'application/json');
+router.use(verifier);
 
-  res.locals.connection.query('SELECT * from users', (err, results) => {
-    if (err) {
-      res.send(JSON.stringify({ status: 500, error: err, response: null }));
-      // If there is error, we send the error in the error section with 500 status
-    } else {
-      res.send(JSON.stringify({ status: 200, error: null, response: results }));
-      // If there is no error, all is good and response is 200OK.
-    }
-  });
-  return next();
-});
+router.post(
+  '/',
+  body('email').isEmail(),
+  body('password').isLength({ min: 5 }),
+  user.create
+);
+
+router.post('/:id/upload', user.upload);
+
+router.post('/:id/link', user.addLink);
+
+router.get('/', user.findAll);
+
+router.get('/:id', user.findOne);
+
+router.get('/:id/link', user.getLinks);
+
+router.put('/:id', user.update);
+
+router.delete('/:id', user.delete);
 
 module.exports = router;

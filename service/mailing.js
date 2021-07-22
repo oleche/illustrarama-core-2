@@ -4,6 +4,23 @@ const fs = require('fs');
 const path = require('path');
 const database = require('../config/database');
 
+exports.welcome = (data) => {
+  sgMail.setApiKey(database.sendgrid);
+
+  fs.readFile(path.resolve(__dirname, 'templates/welcome.mustache'), (bodyErr, bodyData) => {
+    if (bodyErr) { throw bodyErr; }
+    const renderedMail = mustache.render(bodyData.toString(), { user: data });
+    const msg = {
+      to: data.email,
+      from: 'Illustrarama.com <no-responder@illustrarama.com>',
+      subject: '¡Bienvenido a illustrarama.com!',
+      text: 'Bienvenido al mejor sitio de noticias de ilustración, diseño y arte! Si recibes este correo es porque has creado tu cuenta exito.',
+      html: renderedMail,
+    };
+    sgMail.send(msg);
+  });
+}
+
 exports.subscription = (data, newsModel) => {
   const query = {};
   query.limit = 4;
