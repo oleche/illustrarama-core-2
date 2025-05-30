@@ -1,26 +1,30 @@
 version: 2.1
+
 jobs:
-  build:
-    working_directory: ~/repo
+  deploy:
     docker:
-      - image: circleci/node:10.16.3
+      - image: cimg/node:18.17
     steps:
+      # Checkout the code as the first step.
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:YVBLLj/i6DEPkV5HNArcR/4Wd/iQyN3kGizfLmPvMu4"
       - run:
-          name: update-npm
-          command: "sudo npm install -g npm@5"
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          name: Update known hosts
+          command: ssh-keyscan -H 161.35.144.184 >> ~/.ssh/known_hosts
       - run:
-          name: install-packages
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
+          name: update-code
+          command: ssh root@161.35.144.184 "cd /opt/illustrarama/illustrarama-core; git pull"
       - run:
-          name: test
-          command: npm run test
+          name: digital-ocean-backend
+          command: ssh root@161.35.144.184 "source ~/.nvm/nvm.sh; bash /opt/illustrarama/illustrarama-core/deploy.sh"
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
       - deploy:
-          name: digital-ocean
-          command: ssh -o "StrictHostKeyChecking no" root@128.199.57.228 "cd /opt/illustrarama/illustrarama-core; git pull; npm install; pm2 restart illustrarama-core"
+          filters:
+            branches:
+              only: main
