@@ -83,7 +83,7 @@ exports.create = (req, res) => {
     });
   }
 
-  News.findOne({ source: req.body.source })
+  News.findOne({ source: req.body.source, lang: req.body.lang || 'ES' })
     .then((nu) => {
       if (nu === null) {
         // move the image from the source to the server

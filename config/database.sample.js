@@ -1,5 +1,5 @@
 module.exports = {
-  url: 'mongodb://localhost/illustrarama',
+  url: 'mongodb://appuser:appuserpassword@localhost/illustrarama',
   oauth: 'http://localhost:3030/secure/',
   sendgrid: 'APIKEYHERE',
 };
