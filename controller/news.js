@@ -188,6 +188,7 @@ exports.findAll = (req, res) => {
   const page = req.query.page || 1;
   const queryUrl = req.query.url;
   const queryTag = req.query.tag;
+  const queryLang = req.query.lang || 'ES';
   const query = {};
 
   res.setHeader('Content-Type', 'application/json');
@@ -213,6 +214,7 @@ exports.findAll = (req, res) => {
       return false;
     }
     const categoryFilter = { categories: { $in: [queryTag] } };
+    categoryFilter.lang = queryLang;
     res.locals.news.find(categoryFilter, {}, query).sort({ published: -1 }).exec((err, news) => {
     // if there is an error retrieving, send the error otherwise send data
       if (err) {
