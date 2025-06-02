@@ -19,6 +19,7 @@ const facebook = require('./routes/facebook');
 const users = require('./routes/users');
 const links = require('./routes/link');
 const references = require('./routes/references');
+const email = require('./routes/email');
 
 const newsModel = require('./model/news');
 const providersModel = require('./model/providers');
@@ -101,6 +102,7 @@ app.use('/api/v1/facebook', facebook);
 app.use('/api/v1/users', users);
 app.use('/api/v1/link', links);
 app.use('/api/v1/references', references);
+app.use('/api/v1/email', email);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
