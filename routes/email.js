@@ -105,7 +105,7 @@ router.post('/contact', async (req, res) => {
     // Send email to Oscar
     const contactEmailData = {
       from: {
-        email: email,
+        email: RECIPIENT_EMAIL,
         name: name
       },
       to: [{
