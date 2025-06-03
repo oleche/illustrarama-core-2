@@ -4,4 +4,5 @@ module.exports = {
   sendgrid: 'APIKEYHERE',
   mailjet: 'APIKEYHERE',
   mailjet_secret: 'APISECRETHERE',
+  site_url: 'https://illustrarama.com',
 };

@@ -20,6 +20,7 @@ const users = require('./routes/users');
 const links = require('./routes/link');
 const references = require('./routes/references');
 const email = require('./routes/email');
+const sitemap = require('./routes/sitemap');
 
 const newsModel = require('./model/news');
 const providersModel = require('./model/providers');
@@ -32,6 +33,7 @@ const userLinkModel = require('./model/user-links');
 const referencesModel = require('./model/references');
 
 const mailing = require('./service/mailing');
+const sitemapService = require('./service/sitemap');
 
 let database = require('./config/database');
 const databaseTest = require('./config/database-test');
@@ -103,6 +105,7 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/link', links);
 app.use('/api/v1/references', references);
 app.use('/api/v1/email', email);
+app.use('/api/v1/sitemap', sitemap)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -127,6 +130,16 @@ app.use((err, req, res, next) => {
 // cronjobs
 cron.schedule('0 0 * * SUN', () => {
   mailing.weekly(newsModel, subscriptionModel);
+});
+
+cron.schedule('0 0 * * *', () => {
+  sitemapService.sitemap(newsModel, (err) => {
+    if (err) {
+      console.error('Error generating sitemap:', err);
+    } else {
+      console.log('Sitemap generated successfully');
+    }
+  });
 });
 
 module.exports = app;
