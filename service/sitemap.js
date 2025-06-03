@@ -2,7 +2,7 @@ const fs = require('fs');
 const database = require('../config/database');
 
 exports.sitemap = (newsModel, cb) => {
-    newsModel.find({})
+    newsModel.find({}).sort({ published: -1 })
         .then(articles => {
             console.log(`Sitemap generator found ${articles.length} articles in the database.`);
             const allArticlesES = articles.filter(a => a.lang === 'ES');
