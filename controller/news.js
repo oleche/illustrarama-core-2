@@ -201,10 +201,13 @@ exports.findAll = (req, res) => {
 
   query.skip = perPage * (page - 1);
   query.limit = perPage;
-
   if (!queryUrl) {
+    let queryFilter = {};
+    if (queryLang) {
+      queryFilter.lang = queryLang;
+    }
     if (!queryTag) {
-      res.locals.news.find({}, {}, query).sort({ published: -1 }).exec((err, news) => {
+      res.locals.news.find(queryFilter, {}, query).sort({ published: -1 }).exec((err, news) => {
       // if there is an error retrieving, send the error otherwise send data
         if (err) {
           return res.send(err);
@@ -214,7 +217,9 @@ exports.findAll = (req, res) => {
       return false;
     }
     const categoryFilter = { categories: { $in: [queryTag] } };
-    categoryFilter.lang = queryLang;
+    if (queryLang) {
+      categoryFilter.lang = queryLang;
+    }
     res.locals.news.find(categoryFilter, {}, query).sort({ published: -1 }).exec((err, news) => {
     // if there is an error retrieving, send the error otherwise send data
       if (err) {
@@ -224,11 +229,15 @@ exports.findAll = (req, res) => {
     });
     return false;
   }
-  return News.findOne({ source: queryUrl })
+  let filter = { source: queryUrl, lang: queryLang };
+  if (queryLang) {
+    filter.lang = queryLang;
+  }
+  return News.findOne(filter)
     .then((news) => {
       if (!news) {
         return res.status(404).send({
-          message: `Cannot find id ${queryUrl}`,
+          message: `Cannot find id ${queryUrl} in language ${queryLang}`,
         });
       }
       return findAllContents(news, (n) => { res.json(n); });
