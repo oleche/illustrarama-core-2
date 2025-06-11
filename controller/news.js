@@ -266,7 +266,7 @@ exports.findOne = (req, res) => {
       }
       findAllContents(news, (n) => {
         const post = n;
-        News.findOne({ _id: { $gt: news._id } })
+        News.findOne({ _id: { $gt: news._id }, lang: news.lang })
           .then((nu) => {
             post.next = nu;
             res.json(post);
