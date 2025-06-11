@@ -1,3 +1,7 @@
+// IMPORTANT: Make sure to import `instrument.js` at the top of your file.
+// If you're using ECMAScript Modules (ESM) syntax, use `import "./instrument.js";`
+const Sentry = require("@sentry/node");
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -34,6 +38,14 @@ const referencesModel = require('./model/references');
 
 const mailing = require('./service/mailing');
 const sitemapService = require('./service/sitemap');
+
+Sentry.init({
+  dsn: "https://78d52bf7ca3a6865b5346826eb3dcac5@o4509480757297152.ingest.de.sentry.io/4509480766865488",
+
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
+  sendDefaultPii: true,
+});
 
 let database = require('./config/database');
 const databaseTest = require('./config/database-test');
@@ -115,6 +127,9 @@ app.use((req, res, next) => {
   next(err);
 });
 
+// The error handler must be registered before any other error middleware and after all controllers
+Sentry.setupExpressErrorHandler(app);
+
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
@@ -124,6 +139,7 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   res.json(err);//render('error');
+  res.end(res.sentry + "\n");
   next(err);
 });
 
