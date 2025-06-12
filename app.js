@@ -136,11 +136,18 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.json(err);//render('error');
-  res.end(res.sentry + "\n");
-  next(err);
+  // If Sentry has captured the error, res.sentry will be set
+  const sentryEventId = res.sentry;
+
+  // Respond with error and Sentry event ID
+  res.status(err.status || 500).json({
+    error: err,
+    sentry: sentryEventId || null
+  });
+
+  // Call next only if you want to pass the error to another error handler.
+  // In most cases, you should NOT call next() after sending a response.
+  // next(err); // <-- Do NOT call this after res.json()
 });
 
 // cronjobs
