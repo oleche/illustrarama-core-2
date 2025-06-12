@@ -1,10 +1,14 @@
 const md5 = require('md5');
+
 const fs = require('fs');
-const fse = require('fs-extra');
+const path = require('path');
 const rq = require('request');
+const fse = require('fs-extra');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
+const sharp = require('sharp');
+const fileType = require('file-type');
 
 const News = require('../model/news.js');
 const NewsContent = require('../model/news-content.js');
@@ -20,21 +24,54 @@ function getUrlExtension(url) {
 function download(uri, localPath, filename) {
   rq.head(uri, (err, res) => {
     const content = res.headers['content-type'];
-    fse.ensureDir(localPath, () => { // have removed err fronm this... add if needeed
-      rq(uri).pipe(fs.createWriteStream(localPath + filename)).on('close', () => {
-        if (content === 'image/jpeg' || content === 'image/png') {
-          (async () => {
-            await imagemin([localPath + filename], {
+
+    fse.ensureDir(localPath, () => {
+      const filePath = path.join(localPath, filename);
+
+      rq(uri).pipe(fs.createWriteStream(filePath)).on('close', () => {
+        (async () => {
+          let ext = path.extname(filename).toLowerCase();
+
+          // Handle .bin or unknown types
+          if (content === 'application/octet-stream' || !ext || ext === '.bin') {
+            const buffer = await fs.promises.readFile(filePath);
+            const type = await fileType.fromBuffer(buffer);
+            if (type && type.mime.startsWith('image/')) {
+              ext = '.' + type.ext;
+            } else {
+              console.log('Not an image, skipping compression.');
+              return;
+            }
+          }
+
+          const plugins = [];
+          if (ext === '.jpg' || ext === '.jpeg') {
+            plugins.push(imageminMozjpeg({ quality: 50 }));
+          } else if (ext === '.png') {
+            plugins.push(imageminPngquant({ quality: [0.5, 0.6] }));
+          } else if (ext === '.webp') {
+            const jpgPath = path.join(localPath, path.parse(filename).name + '.jpg');
+            await sharp(filePath)
+              .jpeg({ quality: 80 })
+              .toFile(jpgPath);
+            await imagemin([jpgPath], {
               destination: localPath,
-              plugins: [
-                imageminMozjpeg({ quality: 50 }),
-                imageminPngquant({
-                  quality: [0.5, 0.6],
-                }),
-              ],
+              plugins: [imageminMozjpeg({ quality: 50 })],
             });
-          })();
-        }
+            console.log('Converted and compressed webp to jpg.');
+            return;
+          } else {
+            console.log(`Unsupported format (${ext}), skipping compression.`);
+            return;
+          }
+
+          await imagemin([filePath], {
+            destination: localPath,
+            plugins,
+          });
+
+          console.log(`Compressed and saved: ${filename}`);
+        })();
       });
     });
   });
